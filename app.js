@@ -1,69 +1,115 @@
-let encoder;
-let classifier;
+// DOM Elements
+const inputText = document.getElementById('inputText');
+const wordCount = document.getElementById('wordCount');
+const analyzeBtn = document.getElementById('analyzeBtn');
+const clearBtn = document.getElementById('clearBtn');
+const statusBadge = document.getElementById('statusBadge');
+const resultCard = document.getElementById('resultCard');
+const historyList = document.getElementById('historyList');
+const historyCount = document.getElementById('historyCount');
 
-// 1. Basic Preprocessing
-function preprocess(text) {
-  // Lowercase and strip punctuation to normalize input
-  return text.toLowerCase().replace(/[^\w\s\']/gi, '').trim();
-}
+let historyArray = [];
 
-// 2. Initialize Models
-async function init() {
-  try {
-    // Load Universal Sentence Encoder
-    encoder = await use.load();
-    
-    // For a real app, load your hosted model:
-    // classifier = await tf.loadLayersModel('./models/model.json');
-    
-    // --- DEMO MOCK CLASSIFIER ---
-    // Creating a quick, compiled mock model so this demo runs out of the box.
-    classifier = tf.sequential();
-    classifier.add(tf.layers.dense({units: 1, activation: 'sigmoid', inputShape: [512]}));
-    classifier.compile({optimizer: 'adam', loss: 'binaryCrossentropy'});
-    // ----------------------------
+// 1. Initialize the Web Worker
+const worker = new Worker('model.js');
 
-    document.getElementById('status').innerText = 'Model Ready (WebGL Edge Inference)';
-    document.getElementById('status').className = 'ready';
-    document.getElementById('inputText').disabled = false;
-    document.getElementById('predictBtn').disabled = false;
-  } catch (err) {
-    document.getElementById('status').innerText = 'Error loading model.';
-    console.error(err);
+// 2. Listen for messages from the Worker
+worker.onmessage = (event) => {
+  const { type, message, score } = event.data;
+
+  if (type === 'STATUS' && message === 'READY') {
+    // Model loaded
+    statusBadge.innerHTML = '✅ Ready';
+    statusBadge.classList.add('ready');
+    inputText.disabled = false;
+    analyzeBtn.disabled = false;
+  } 
+  else if (type === 'RESULT') {
+    // Prediction received
+    displayResult(score, inputText.value.trim());
+    analyzeBtn.innerHTML = '⚡ Analyze';
+    analyzeBtn.disabled = false;
   }
-}
+};
 
-// 3. Inference Logic
-async function predictSentiment() {
-  const rawText = document.getElementById('inputText').value;
-  if (!rawText) return;
+// 3. UI Interactions
+inputText.addEventListener('input', () => {
+  const text = inputText.value.trim();
+  const chars = text.length;
+  const words = text === '' ? 0 : text.split(/\s+/).length;
+  wordCount.innerText = `${chars} chars · ${words} words`;
+});
 
-  const cleanText = preprocess(rawText);
-  
-  // Get embeddings from USE
-  const embeddings = await encoder.embed([cleanText]);
-  
-  // Run classification
-  const prediction = classifier.predict(embeddings);
-  const score = prediction.dataSync()[0]; // Value between 0 and 1
-  
-  // Cleanup tensors to prevent memory leaks
-  embeddings.dispose();
-  prediction.dispose();
+analyzeBtn.addEventListener('click', () => {
+  const text = inputText.value.trim();
+  if (!text) return;
 
-  // Update UI
+  // Set loading state
+  analyzeBtn.innerHTML = '⏳ Analyzing...';
+  analyzeBtn.disabled = true;
+
+  // Send text to the Web Worker for processing
+  worker.postMessage({ type: 'PREDICT', payload: text });
+});
+
+clearBtn.addEventListener('click', () => {
+  inputText.value = '';
+  wordCount.innerText = '0 chars · 0 words';
+  resultCard.classList.add('hidden');
+});
+
+// 4. Render Result & Update History
+function displayResult(score, text) {
   const isPositive = score > 0.5;
-  const resultCard = document.getElementById('resultCard');
-  resultCard.classList.remove('hidden');
-  document.getElementById('sentimentLabel').innerText = isPositive ? '😊 Positive' : '😠 Negative';
+  const confidence = (isPositive ? score : (1 - score)) * 100;
+  const confidenceStr = confidence.toFixed(1) + '%';
+  const label = isPositive ? 'Positive' : 'Negative';
+
+  // Update Result Card UI
+  document.getElementById('resultEmoji').innerText = isPositive ? '😊' : '😠';
+  document.getElementById('resultLabel').innerText = label;
+  document.getElementById('resultScore').innerText = confidenceStr;
+  document.getElementById('resultTextSnippet').innerText = `"${text}"`;
   
-  // Format confidence (if score is 0.2, it's 80% confident it's negative)
-  const confidence = isPositive ? score : (1 - score);
-  document.getElementById('confidenceScore').innerText = (confidence * 100).toFixed(1) + '%';
+  const progressBar = document.getElementById('progressBar');
+  progressBar.style.width = confidenceStr;
+
+  // Swap CSS classes for colors
+  const labelEl = document.getElementById('resultLabel');
+  const scoreEl = document.getElementById('resultScore');
+  
+  labelEl.className = isPositive ? 'positive-text' : 'negative-text';
+  scoreEl.className = isPositive ? 'score-text positive-text' : 'score-text negative-text';
+  progressBar.className = isPositive ? 'progress-bar positive-bg' : 'progress-bar negative-bg';
+  resultCard.className = isPositive ? 'card result-card border-positive' : 'card result-card border-negative';
+
+  resultCard.classList.remove('hidden');
+
+  // Add to History
+  addToHistory({ text, label, confidenceStr, isPositive });
 }
 
-// Bind events
-document.getElementById('predictBtn').addEventListener('click', predictSentiment);
+function addToHistory(item) {
+  historyArray.unshift(item); // Add to beginning
+  historyCount.innerText = `${historyArray.length} analyses`;
 
-// Start
-init();
+  if (historyArray.length === 1) {
+    historyList.innerHTML = ''; // Clear empty state
+  }
+
+  const historyItem = document.createElement('div');
+  historyItem.className = 'history-item';
+  historyItem.innerHTML = `
+    <div class="emoji">${item.isPositive ? '😊' : '😠'}</div>
+    <div style="min-width: 0; flex-grow: 1;">
+      <div class="history-item-text">${item.text}</div>
+      <div class="history-item-meta">
+        <span class="${item.isPositive ? 'positive-text' : 'negative-text'}"><b>${item.label}</b></span>
+        <span>·</span>
+        <span>${item.confidenceStr}</span>
+      </div>
+    </div>
+  `;
+  
+  historyList.prepend(historyItem);
+}
