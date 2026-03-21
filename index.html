@@ -32,20 +32,13 @@
         <div class="card-footer">
           <span class="word-count" id="wordCount">0 chars · 0 words</span>
           <div class="actions">
+            <input type="file" id="fileUpload" accept=".txt,.csv" style="display: none;">
+            <button id="uploadBtn" class="btn-secondary">📄 Upload .txt / .csv</button>
             <button id="clearBtn" class="btn-clear">Clear</button>
             <button id="analyzeBtn" class="btn-primary" disabled>⚡ Analyze</button>
           </div>
         </div>
       </div>
-
-     <div class="actions">
-         <input type="file" id="fileUpload" accept=".txt,.csv" style="display: none;">
-  
-        <button id="uploadBtn" class="btn-secondary">📄 Upload .txt / .csv</button>
-  
-        <button id="clearBtn" class="btn-clear">Clear</button>
-        <button id="analyzeBtn" class="btn-primary" disabled>⚡ Analyze</button>
-     </div>
 
       <div id="resultCard" class="card result-card hidden">
         <div class="result-header">
