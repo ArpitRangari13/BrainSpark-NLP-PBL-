@@ -2,24 +2,71 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Client-Side Sentiment Analysis</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edge Sentiment AI</title>
   <link rel="stylesheet" href="styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/universal-sentence-encoder"></script>
 </head>
 <body>
-  <div class="container">
-    <h1>Sentiment Analyzer</h1>
-    <p id="status" class="loading">Loading AI models (this takes a moment)...</p>
-    
-    <textarea id="inputText" placeholder="Type a sentence here... (e.g., 'I absolutely love this new feature!')" disabled></textarea>
-    <button id="predictBtn" disabled>Analyze Sentiment</button>
-    
-    <div id="resultCard" class="hidden">
-      <h2 id="sentimentLabel"></h2>
-      <p>Confidence: <span id="confidenceScore"></span></p>
+  <header>
+    <div class="logo">
+      <span class="icon">🧠</span>
+      <div>
+        <h1>Edge Sentiment AI</h1>
+        <p>Privacy-first · On-device inference</p>
+      </div>
     </div>
-  </div>
+    <div class="status-badge" id="statusBadge">
+      <span class="spinner">⏳</span> Loading Models...
+    </div>
+  </header>
+
+  <main>
+    <section class="input-section">
+      <div class="hero">
+        <h2>Analyze sentiment <br><span class="highlight">in real time</span></h2>
+        <p>Powered by on-device machine learning. Your text never leaves your browser — fast, private, and accurate.</p>
+      </div>
+
+      <div class="card input-card">
+        <textarea id="inputText" placeholder="Type or paste text here..." disabled></textarea>
+        <div class="card-footer">
+          <span class="word-count" id="wordCount">0 chars · 0 words</span>
+          <div class="actions">
+            <button id="clearBtn" class="btn-clear">Clear</button>
+            <button id="analyzeBtn" class="btn-primary" disabled>⚡ Analyze</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="resultCard" class="card result-card hidden">
+        <div class="result-header">
+          <div class="result-title">
+            <span id="resultEmoji" class="emoji">😊</span>
+            <div>
+              <h3 id="resultLabel" class="positive-text">Positive</h3>
+              <p>Confidence Score</p>
+            </div>
+          </div>
+          <div id="resultScore" class="score-text positive-text">0%</div>
+        </div>
+        <div class="progress-bar-bg">
+          <div id="progressBar" class="progress-bar positive-bg" style="width: 0%"></div>
+        </div>
+        <p id="resultTextSnippet" class="snippet"></p>
+      </div>
+    </section>
+
+    <aside class="history-section">
+      <div class="history-header">
+        <h3>🕒 History</h3>
+        <span id="historyCount">0 analyses</span>
+      </div>
+      <div id="historyList" class="history-list">
+        <div class="empty-state">No analyses yet.</div>
+      </div>
+    </aside>
+  </main>
+
   <script src="app.js"></script>
 </body>
 </html>
