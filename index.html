@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Client-Side Sentiment Analysis</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/universal-sentence-encoder"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Sentiment Analyzer</h1>
+    <p id="status" class="loading">Loading AI models (this takes a moment)...</p>
+    
+    <textarea id="inputText" placeholder="Type a sentence here... (e.g., 'I absolutely love this new feature!')" disabled></textarea>
+    <button id="predictBtn" disabled>Analyze Sentiment</button>
+    
+    <div id="resultCard" class="hidden">
+      <h2 id="sentimentLabel"></h2>
+      <p>Confidence: <span id="confidenceScore"></span></p>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
