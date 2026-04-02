@@ -1,6 +1,60 @@
-🧠 BrainSpark: Sentiment Analysis of E-Consultation CommentsBrainSpark is an automated, privacy-first sentiment analysis system designed to help government agencies and organizations understand public opinion efficiently. By utilizing Edge-based Artificial Intelligence, the system classifies citizen feedback directly within the user's browser, ensuring that no sensitive data ever leaves the local device.🌐 Live DemoAccess the application here: BrainSpark - NLP PBL 🚀 Key FeaturesPrivacy-First Architecture: 100% of data processing occurs locally on the client side; no feedback is transmitted to backend servers.Edge AI Performance: Uses TensorFlow.js to run deep learning models directly in the browser.Contextual Understanding: Leverages Google’s Universal Sentence Encoder (USE) to capture semantic meaning, sarcasm, and complex grammar.Large-Scale Processing: Employs Text Chunking and mini-batching to handle thousands of comments without crashing the browser.Responsive UI: Utilizes a Web Worker architecture to offload heavy ML computations to a background thread, maintaining a seamless 60fps interface.Interactive Dashboards: Real-time visualization of sentiment trends (Positive/Negative) using Chart.js.🛠️ Technical StackFrontend: HTML5, CSS3, JavaScript.Machine Learning: TensorFlow.js.Embeddings: Google Universal Sentence Encoder (USE).Visualization: Chart.js.Data Ingestion: HTML5 FileReader API.📂 Project StructurePlaintext├── index.html          # Main UI and Dashboard
+#🧠 BrainSpark: Privacy-First Sentiment Analysis
+BrainSpark is an automated, highly efficient system designed to analyze public comments received through E-Consultation modules. By leveraging Edge-based Artificial Intelligence and Deep Learning, BrainSpark classifies citizen feedback directly within the user's browser — ensuring absolute data privacy as no information ever leaves the local device.
+🌐 Live Demo – Try BrainSpark in action!
+
+**🚀 Key Features**
+- 🔒 Absolute Privacy: 100% of citizen feedback is processed locally; no data is transmitted to backend servers.
+- 🎯 Contextual Accuracy: Powered by Google’s Universal Sentence Encoder (USE) to capture semantic meaning, sarcasm, and complex grammar.
+- ⚡ Edge AI Performance: Runs deep learning models directly in the browser using TensorFlow.js with zero server-side compute costs.
+- 📊 Scalable Data Processing: Memory-safe document chunking and mini-batching handle thousands of comments without crashing.
+- 🖥️ Non-Blocking UI: Asynchronous Web Worker architecture ensures smooth 60fps interface while ML computations run in the background.
+- 📈 Interactive Dashboards: Real-time visualization of sentiment distribution (Positive/Negative) using Chart.js.
+
+**🛠️ Technical Stack**
+- Frontend: HTML5, CSS3, JavaScript
+- Machine Learning: TensorFlow.js
+- Embeddings: Google Universal Sentence Encoder (USE)
+- Visualization: Chart.js
+- API: HTML5 FileReader API for local data ingestion
+
+**📂 Project Structure**
+├── index.html          # Main User Interface and Dashboard
 ├── styles.css          # Modern, responsive styling
 ├── app.js              # UI logic and Web Worker communication
-├── model.js            # Web Worker handling ML & TensorFlow.js logic
-└── assets/             # Icons and static resources
-📖 How It WorksData Upload: Users upload public comment logs in .csv or .txt format.Preprocessing: The system initiates Text Chunking to split data into memory-safe batches.Feature Extraction: Sentences are mapped into 512-dimensional dense vector embeddings via USE.Classification: A custom Sequential Neural Network predicts the sentiment for each embedding.Visualization: Results are aggregated and displayed in interactive pie charts and bar graphs for immediate policy insights.🎯 ObjectivesTo reduce manual effort in analyzing thousands of public comments.To eliminate human bias and inconsistency in feedback interpretation.To assist policymakers in making rapid, data-driven decisions.To ensure absolute data privacy for citizens participating in E-Consultations.
+├── model.js            # Background Web Worker for ML & TensorFlow.js logic
+└── assets/             # Project static resources and icons
+
+**📖 How It Works**
+- Data Ingestion: Users upload .csv or .txt comment logs via the HTML5 FileReader API.
+- Memory Management: Text chunking splits documents into batches for sequential processing.
+- Feature Extraction: Sentences are mapped into 512-dimensional dense vector embeddings using USE.
+- Classification: A custom Sequential Neural Network predicts sentiment (Positive/Negative).
+- Visualization: Results are displayed via progress bars, historical logs, and aggregate charts in real time.
+
+**🎯 Objectives**
+- Process massive datasets of citizen comments without backend servers.
+- Bypass manual stop-word removal or stemming using state-of-the-art embeddings.
+- Reduce human bias and inconsistency in interpreting public opinion.
+- Assist policymakers in making rapid, data-driven decisions through summarized insights.
+
+**🚀 Getting Started**
+Prerequisites
+- Modern browser (Chrome, Edge, Firefox) with JavaScript enabled.
+- Internet connection (only required to load USE model from TensorFlow.js CDN).
+Installation
+Clone the repository:
+git clone https://github.com/your-username/brainspark.git
+cd brainspark
+
+
+Open index.html in your browser to launch BrainSpark.
+
+**📊 Demo Workflow**
+- Upload a .csv or .txt file containing citizen comments.
+- Watch BrainSpark process data locally in your browser.
+- Explore interactive dashboards showing sentiment distribution.
+
+**🤝 Contributing**
+Contributions are welcome! Please fork the repo and submit a pull request.
+For major changes, open an issue first to discuss what you’d like to improve.
+
