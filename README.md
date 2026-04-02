@@ -43,7 +43,7 @@ Prerequisites
 - Internet connection (only required to load USE model from TensorFlow.js CDN).
 Installation
 Clone the repository:
-git clone https://github.com/ArpitRangari13/brainspark.git
+git clone [https://github.com/ArpitRangari13/brainspark.git](https://github.com/ArpitRangari13/BrainSpark-NLP-PBL-)
 cd brainspark
 
 
