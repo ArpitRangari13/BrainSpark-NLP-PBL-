@@ -1,4 +1,4 @@
-#🧠 BrainSpark: Privacy-First Sentiment Analysis
+# 🧠 BrainSpark: Privacy-First Sentiment Analysis
 BrainSpark is an automated, highly efficient system designed to analyze public comments received through E-Consultation modules. By leveraging Edge-based Artificial Intelligence and Deep Learning, BrainSpark classifies citizen feedback directly within the user's browser — ensuring absolute data privacy as no information ever leaves the local device.
 🌐 Live Demo – Try BrainSpark in action!
 
@@ -43,7 +43,7 @@ Prerequisites
 - Internet connection (only required to load USE model from TensorFlow.js CDN).
 Installation
 Clone the repository:
-git clone https://github.com/your-username/brainspark.git
+git clone https://github.com/ArpitRangari13/brainspark.git
 cd brainspark
 
 
